@@ -8,6 +8,7 @@
 
 #define ScreenHeight [[UIScreen mainScreen]bounds].size.height
 #import "RotationPresentAnimation.h"
+#import "UIView+MotionBlur.h"
 
 @implementation RotationPresentAnimation
 
@@ -28,11 +29,13 @@
     [[transitionContext containerView]addSubview:toVC.view];
     
     //4
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        toVC.view.frame = finalRect;
-    } completion:^(BOOL finished) {
-        //5
-        [transitionContext completeTransition:YES];
+    [toVC.view enableBlurWithAngle:M_PI_2 completion:^{
+        [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            toVC.view.frame = finalRect;
+        } completion:^(BOOL finished) {
+            //5
+            [transitionContext completeTransition:YES];
+        }];
     }];
     
 }

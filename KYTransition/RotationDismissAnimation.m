@@ -7,6 +7,7 @@
 //
 
 #import "RotationDismissAnimation.h"
+#import "UIView+MotionBlur.h"
 
 @implementation RotationDismissAnimation
 
@@ -31,10 +32,12 @@
     [containerView sendSubviewToBack:toVC.view];
     
     //4
-    [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0f usingSpringWithDamping:0.4f initialSpringVelocity:0.0f options:UIViewAnimationOptionCurveLinear animations:^{
-        fromVC.view.frame = finalRect;
-    } completion:^(BOOL finished) {
-        [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+    [fromVC.view enableBlurWithAngle:M_PI_2 completion:^{
+        [UIView animateWithDuration:[self transitionDuration:transitionContext] delay:0.0f usingSpringWithDamping:0.4f initialSpringVelocity:0.0f options:UIViewAnimationOptionCurveLinear animations:^{
+            fromVC.view.frame = finalRect;
+        } completion:^(BOOL finished) {
+            [transitionContext completeTransition:![transitionContext transitionWasCancelled]];
+        }];
     }];
 }
 
